@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heartlink - Connect. Crush. Campus.</title>
+    <title>Campus Cupid - Where Campus Hearts Connect 💕</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -135,12 +135,28 @@
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             background: linear-gradient(135deg, var(--ruby), var(--deep-red), var(--burgundy));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '💘';
+            font-size: 32px;
+            filter: drop-shadow(0 2px 8px rgba(224, 17, 95, 0.4));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .nav-buttons {
@@ -778,7 +794,7 @@
 
     <!-- Navigation -->
     <nav>
-        <div class="logo">Heartlink</div>
+        <div class="logo">Campus Cupid</div>
         <div class="nav-buttons">
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
                 <span class="sun-icon">☀️</span>
@@ -792,7 +808,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Find Your Connection<br>On Campus</h1>
+            <h1>Find Your Perfect Match<br>On Campus 💘</h1>
             <p class="subtitle">Friendships. Conversations. Crushes. All in one classy space for your college community.</p>
             <div class="cta">
                 <a href="signup.html" class="btn btn-primary" style="padding: 16px 48px; font-size: 18px; text-decoration: none;">Get Started</a>
@@ -907,7 +923,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>© 2025 Heartlink. Made with 💖 for your campus.</p>
+        <p>© 2025 Campus Cupid. Made with 💖 for your campus.</p>
         <p style="margin-top: 10px; font-size: 14px;">Secure. Private. College-Verified.</p>
     </footer>
 
@@ -917,10 +933,11 @@
         const body = document.body;
         
         // Check for saved theme preference or default to light mode
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         if (savedTheme === 'dark') {
             body.classList.add('dark-mode');
         }
+
         
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
