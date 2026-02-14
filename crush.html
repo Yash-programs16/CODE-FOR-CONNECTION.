@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crush - Heartlink</title>
+    <title>Crush - Campus Cupid</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -371,7 +371,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo" onclick="window.location.href='dashboard.html'">Heartlink</div>
+        <div class="logo" onclick="window.location.href='dashboard.html'">Campus Cupid</div>
         <a href="dashboard.html" class="back-btn">← Dashboard</a>
     </nav>
 
@@ -445,7 +445,7 @@
     </div>
 
     <script>
-        const currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        const currentUser = JSON.parse(localStorage.getItem('campuscupid_current_user') || 'null');
         if (!currentUser || !currentUser.profileCompleted) {
             window.location.href = 'login.html';
         }
@@ -456,9 +456,9 @@
         }
 
         // Load crush data
-        let crushData = JSON.parse(localStorage.getItem('heartlink_crushes') || '[]');
-        let matches = JSON.parse(localStorage.getItem('heartlink_matches') || '[]');
-        const allUsers = JSON.parse(localStorage.getItem('heartlink_users') || '[]');
+        let crushData = JSON.parse(localStorage.getItem('campuscupid_crushes') || '[]');
+        let matches = JSON.parse(localStorage.getItem('campuscupid_matches') || '[]');
+        const allUsers = JSON.parse(localStorage.getItem('campuscupid_users') || '[]');
 
         // Add demo users if not exist
         if (allUsers.length < 5) {
@@ -506,7 +506,7 @@
                     allUsers.push(user);
                 }
             });
-            localStorage.setItem('heartlink_users', JSON.stringify(allUsers));
+            localStorage.setItem('campuscupid_users', JSON.stringify(allUsers));
 
             // Add one demo crush on current user (create secret admirer!)
             if (!crushData.find(c => c.crushRegNo === currentUser.registrationNo)) {
@@ -519,7 +519,7 @@
                     submittedAt: new Date().toISOString(),
                     isMatched: false
                 });
-                localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
+                localStorage.setItem('campuscupid_crushes', JSON.stringify(crushData));
             }
         }
 
@@ -600,7 +600,7 @@
                 handleMatch(newCrush, mutualCrush, crushUser);
             } else {
                 // Just submitted
-                localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
+                localStorage.setItem('campuscupid_crushes', JSON.stringify(crushData));
                 document.getElementById('crushRegNo').value = '';
                 showModal('successModal');
                 
@@ -625,8 +625,8 @@
             matches.push(match);
 
             // Save data
-            localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
-            localStorage.setItem('heartlink_matches', JSON.stringify(matches));
+            localStorage.setItem('campuscupid_crushes', JSON.stringify(crushData));
+            localStorage.setItem('campuscupid_matches', JSON.stringify(matches));
 
             // Update stats
             updateStats();
@@ -686,10 +686,10 @@
         }
 
         function updateStats() {
-            const stats = JSON.parse(localStorage.getItem('heartlink_stats') || '{}');
+            const stats = JSON.parse(localStorage.getItem('campuscupid_stats') || '{}');
             stats.matches = matches.filter(m => m.user1Id === currentUser.id || m.user2Id === currentUser.id).length;
             stats.admirers = crushData.filter(c => c.crushRegNo === currentUser.registrationNo && !c.isMatched).length;
-            localStorage.setItem('heartlink_stats', JSON.stringify(stats));
+            localStorage.setItem('campuscupid_stats', JSON.stringify(stats));
         }
 
         function showModal(modalId) {
