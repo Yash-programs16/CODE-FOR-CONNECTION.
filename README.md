@@ -1,8 +1,8 @@
-# ❤️ Heartlink — SRM AP College Dating & Connection Platform
+# ❤️ Campus Cupid — SRM AP College Dating & Connection Platform
 
 ## 📌 Concept Overview
 
-Heartlink is a classy, premium, love-themed yet professional dating and connection platform built specifically for **SRM AP** students. The platform focuses on verified identities, safe interaction, and meaningful connections within the college community. The goal is to create a trusted digital space where students can build friendships, talk openly, or express anonymous crushes while maintaining privacy and authenticity.
+Campus Cupid is a classy, premium, love-themed yet professional dating and connection platform built specifically for **SRM AP** students. The platform focuses on verified identities, safe interaction, and meaningful connections within the college community. The goal is to create a trusted digital space where students can build friendships, talk openly, or express anonymous crushes while maintaining privacy and authenticity.
 
 ---
 
