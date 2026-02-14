@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Heartlink</title>
+    <title>Dashboard - Campus Cupid</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -280,7 +280,7 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">Heartlink</div>
+        <div class="logo"><span style="font-size: 28px; margin-right: 8px;">💘</span>Campus Cupid</div>
         <div class="nav-right">
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">U</div>
@@ -371,7 +371,7 @@
 
     <script>
         // Check if user is logged in, if not create demo user
-        let currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        let currentUser = JSON.parse(localStorage.getItem('campuscupid_current_user') || 'null');
         
         if (!currentUser) {
             // Create demo user for instant access
@@ -383,7 +383,7 @@
                 fullName: 'Demo User',
                 profileCompleted: true
             };
-            localStorage.setItem('heartlink_current_user', JSON.stringify(currentUser));
+            localStorage.setItem('campuscupid_current_user', JSON.stringify(currentUser));
         }
 
         // Display user info
@@ -402,7 +402,7 @@
         }
 
         // Initialize mock stats
-        const stats = JSON.parse(localStorage.getItem('heartlink_stats') || '{"groups": 12, "available": 8, "admirers": 0, "matches": 0}');
+        const stats = JSON.parse(localStorage.getItem('campuscupid_stats') || '{"groups": 12, "available": 8, "admirers": 0, "matches": 0}');
         
         if (stats.admirers > 0) {
             document.getElementById('admirersCount').textContent = stats.admirers;
@@ -411,7 +411,7 @@
 
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('heartlink_current_user');
+                localStorage.removeItem('campuscupid_current_user');
                 window.location.href = 'index.html';
             }
         }
