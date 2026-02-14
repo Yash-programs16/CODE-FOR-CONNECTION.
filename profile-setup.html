@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Profile - Heartlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ruby: #E0115F;
+            --deep-red: #C41E3A;
+            --burgundy: #800020;
+            
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(199, 21, 133, 0.2) 0%, transparent 50%),
+                          linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 30%, #FFF0F3 60%, #FFE5E9 100%);
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D1B1F;
+            --text-secondary: #8B4D5C;
+            --border-color: rgba(199, 21, 133, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: rgba(199, 21, 133, 0.2);
+        }
+
+        body.dark-mode {
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                          linear-gradient(135deg, #1a0a0e 0%, #2d1215 30%, #1f0b11 60%, #251018 100%);
+            --bg-card: rgba(40, 20, 25, 0.85);
+            --text-primary: #FFE5EC;
+            --text-secondary: #D4A5B0;
+            --border-color: rgba(255, 105, 180, 0.3);
+            --input-bg: rgba(40, 25, 30, 0.9);
+            --input-border: rgba(255, 105, 180, 0.3);
+            --ruby: #FF4081;
+            --deep-red: #FF1744;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 48px 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(255, 20, 100, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .required {
+            color: var(--ruby);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--ruby);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .gender-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .gender-option {
+            padding: 14px;
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            background: var(--input-bg);
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.2s ease;
+            font-weight: 500;
+            color: var(--text-primary);
+            transform: translateZ(0);
+        }
+
+        .gender-option:hover {
+            border-color: var(--ruby);
+        }
+
+        .gender-option.selected {
+            border-color: var(--ruby);
+            background: rgba(224, 17, 95, 0.1);
+            color: var(--ruby);
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .interest-tag {
+            padding: 10px 12px;
+            border: 2px solid var(--input-border);
+            border-radius: 20px;
+            background: var(--input-bg);
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transform: translateZ(0);
+        }
+
+        .interest-tag:hover {
+            border-color: var(--ruby);
+        }
+
+        .interest-tag.selected {
+            border-color: var(--ruby);
+            background: rgba(224, 17, 95, 0.1);
+            color: var(--ruby);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 20, 100, 0.3);
+            margin-top: 8px;
+            transform: translateZ(0);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) translateZ(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .profile-pic-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .profile-pic-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 48px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 20, 100, 0.3);
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            border-color: var(--ruby);
+            color: var(--ruby);
+        }
+
+        #profilePicInput {
+            display: none;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(224, 17, 95, 0.15);
+            animation: floatSimple 20s infinite ease-in-out;
+            will-change: transform;
+        }
+
+        body.dark-mode .heart {
+            color: rgba(255, 64, 129, 0.25);
+        }
+
+        @keyframes floatSimple {
+            0%, 100% { 
+                transform: translateY(0); 
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-30px); 
+                opacity: 0.5;
+            }
+        }
+
+        .heart:nth-child(1) { left: 15%; top: 20%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 35%; top: 50%; animation-delay: 4s; }
+        .heart:nth-child(3) { left: 55%; top: 30%; animation-delay: 8s; }
+        .heart:nth-child(4) { left: 75%; top: 60%; animation-delay: 12s; }
+        .heart:nth-child(5) { left: 95%; top: 40%; animation-delay: 16s; }
+
+        @media (max-width: 640px) {
+            .profile-card {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .gender-options {
+                grid-template-columns: 1fr;
+            }
+
+            .interests-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-hearts">
+        <div class="heart">💕</div>
+        <div class="heart">💝</div>
+        <div class="heart">💖</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="header">
+                <h1>Build Your Profile</h1>
+                <p class="subtitle">Let others know who you are</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="profileForm">
+                <div class="profile-pic-section">
+                    <div class="profile-pic-preview" id="profilePicPreview">
+                        👤
+                    </div>
+                    <label for="profilePicInput" class="upload-btn">
+                        Upload Photo (Optional)
+                    </label>
+                    <input type="file" id="profilePicInput" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        placeholder="Your full name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="displayName">Display Name <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="displayName" 
+                        placeholder="How others will see you"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio <span class="required">*</span></label>
+                    <textarea 
+                        id="bio" 
+                        placeholder="Tell us about yourself... What are you passionate about?"
+                        maxlength="200"
+                        required
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="bioCount">0</span>/200
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender <span class="required">*</span></label>
+                    <div class="gender-options">
+                        <div class="gender-option" data-value="male">Male</div>
+                        <div class="gender-option" data-value="female">Female</div>
+                        <div class="gender-option" data-value="other">Other</div>
+                        <div class="gender-option" data-value="prefer_not_to_say">Prefer not to say</div>
+                    </div>
+                    <input type="hidden" id="gender" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year of Study</label>
+                    <select id="year">
+                        <option value="">Select your year</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                        <option value="5">5th Year+</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input 
+                        type="text" 
+                        id="department" 
+                        placeholder="e.g., Computer Science, Business"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Interests (Select at least 3)</label>
+                    <div class="interests-grid" id="interestsGrid">
+                        <div class="interest-tag" data-interest="coding">💻 Coding</div>
+                        <div class="interest-tag" data-interest="football">⚽ Football</div>
+                        <div class="interest-tag" data-interest="music">🎵 Music</div>
+                        <div class="interest-tag" data-interest="art">🎨 Art</div>
+                        <div class="interest-tag" data-interest="gaming">🎮 Gaming</div>
+                        <div class="interest-tag" data-interest="reading">📚 Reading</div>
+                        <div class="interest-tag" data-interest="photography">📷 Photo</div>
+                        <div class="interest-tag" data-interest="travel">✈️ Travel</div>
+                        <div class="interest-tag" data-interest="fitness">💪 Fitness</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    Complete Profile & Continue
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        const form = document.getElementById('profileForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const progressFill = document.getElementById('progressFill');
+        const bioInput = document.getElementById('bio');
+        const bioCount = document.getElementById('bioCount');
+        let selectedInterests = [];
+        let selectedGender = '';
+
+        // Bio character counter
+        bioInput.addEventListener('input', function() {
+            bioCount.textContent = this.value.length;
+            updateProgress();
+        });
+
+        // Gender selection
+        document.querySelectorAll('.gender-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedGender = this.dataset.value;
+                document.getElementById('gender').value = selectedGender;
+                updateProgress();
+            });
+        });
+
+        // Interest selection
+        document.querySelectorAll('.interest-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const interest = this.dataset.interest;
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedInterests = selectedInterests.filter(i => i !== interest);
+                } else {
+                    this.classList.add('selected');
+                    selectedInterests.push(interest);
+                }
+                updateProgress();
+            });
+        });
+
+        // Profile picture upload
+        document.getElementById('profilePicInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('profilePicPreview');
+                    preview.style.backgroundImage = `url(${event.target.result})`;
+                    preview.style.backgroundSize = 'cover';
+                    preview.style.backgroundPosition = 'center';
+                    preview.textContent = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Progress calculation
+        function updateProgress() {
+            let progress = 0;
+            const totalFields = 5;
+            
+            if (document.getElementById('fullName').value) progress += 20;
+            if (document.getElementById('displayName').value) progress += 20;
+            if (bioInput.value.length >= 20) progress += 20;
+            if (selectedGender) progress += 20;
+            if (selectedInterests.length >= 3) progress += 20;
+            
+            progressFill.style.width = progress + '%';
+        }
+
+        // Form inputs update progress
+        document.getElementById('fullName').addEventListener('input', updateProgress);
+        document.getElementById('displayName').addEventListener('input', updateProgress);
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const displayName = document.getElementById('displayName').value;
+            const bio = bioInput.value;
+            const year = document.getElementById('year').value;
+            const department = document.getElementById('department').value;
+
+            // Validation
+            if (!fullName || !displayName || !bio) {
+                showError('Please fill in all required fields');
+                return;
+            }
+
+            if (bio.length < 20) {
+                showError('Bio must be at least 20 characters long');
+                return;
+            }
+
+            if (!selectedGender) {
+                showError('Please select your gender');
+                return;
+            }
+
+            if (selectedInterests.length < 3) {
+                showError('Please select at least 3 interests');
+                return;
+            }
+
+            // Update user profile
+            const users = JSON.parse(localStorage.getItem('heartlink_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+
+            if (userIndex !== -1) {
+                users[userIndex] = {
+                    ...users[userIndex],
+                    fullName,
+                    displayName,
+                    bio,
+                    gender: selectedGender,
+                    year,
+                    department,
+                    interests: selectedInterests,
+                    profileCompleted: true,
+                    profileCompletedAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('heartlink_users', JSON.stringify(users));
+                localStorage.setItem('heartlink_current_user', JSON.stringify(users[userIndex]));
+
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

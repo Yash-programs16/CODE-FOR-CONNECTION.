@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Heartlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ruby: #E0115F;
+            --deep-red: #C41E3A;
+            --burgundy: #800020;
+            
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(199, 21, 133, 0.2) 0%, transparent 50%),
+                          linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 30%, #FFF0F3 60%, #FFE5E9 100%);
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D1B1F;
+            --text-secondary: #8B4D5C;
+            --border-color: rgba(199, 21, 133, 0.15);
+        }
+
+        body.dark-mode {
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                          linear-gradient(135deg, #1a0a0e 0%, #2d1215 30%, #1f0b11 60%, #251018 100%);
+            --bg-card: rgba(40, 20, 25, 0.85);
+            --text-primary: #FFE5EC;
+            --text-secondary: #D4A5B0;
+            --border-color: rgba(255, 105, 180, 0.3);
+            --ruby: #FF4081;
+            --deep-red: #FF1744;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            transition: background 0.5s ease;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--ruby);
+            color: var(--ruby);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        /* Feature Cards Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(224, 17, 95, 0.05), rgba(199, 21, 133, 0.08));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 20, 100, 0.2);
+            border-color: var(--ruby);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            font-size: 56px;
+        }
+
+        .feature-badge {
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .feature-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .cta-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Heartlink</div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName" style="color: var(--text-primary); font-weight: 500;">User</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome Back, <span id="welcomeName">User</span>! 💘</h1>
+            <p class="subtitle">Choose how you want to connect today</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Friendship Card -->
+            <div class="feature-card" onclick="window.location.href='friendship.html'">
+                <div class="feature-header">
+                    <div class="feature-icon">👥</div>
+                    <div class="feature-badge">ACTIVE</div>
+                </div>
+                <h3>Friendship</h3>
+                <p>Join or create groups based on your passions—coding, football, music, study sessions, and more. Build your campus tribe!</p>
+                
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="groupCount">12</div>
+                        <div class="stat-label">Active Groups</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">245</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                </div>
+
+                <button class="cta-btn">Explore Groups</button>
+            </div>
+
+            <!-- Open to Talk Card -->
+            <div class="feature-card" onclick="window.location.href='open-to-talk.html'">
+                <div class="feature-header">
+                    <div class="feature-icon">💬</div>
+                    <div class="feature-badge">ACTIVE</div>
+                </div>
+                <h3>Open to Talk</h3>
+                <p>Enable your availability for 24-48 hours. Chat with others or browse who's available. Private & screenshot protected.</p>
+                
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="availableCount">8</div>
+                        <div class="stat-label">Available Now</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">--</div>
+                        <div class="stat-label">Your Status</div>
+                    </div>
+                </div>
+
+                <button class="cta-btn">Start Chatting</button>
+            </div>
+
+            <!-- Crush Card -->
+            <div class="feature-card" onclick="window.location.href='crush.html'">
+                <div class="feature-header">
+                    <div class="feature-icon">💘</div>
+                    <div class="feature-badge">HOT</div>
+                </div>
+                <h3>Crush</h3>
+                <p>100% anonymous. Enter your crush's registration number. They'll only know if it's mutual. Zero awkwardness guaranteed!</p>
+                
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="admirersCount">?</div>
+                        <div class="stat-label">Secret Admirers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="matchesCount">0</div>
+                        <div class="stat-label">Matches</div>
+                    </div>
+                </div>
+
+                <button class="cta-btn">Find Your Match</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in, if not create demo user
+        let currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        
+        if (!currentUser) {
+            // Create demo user for instant access
+            currentUser = {
+                id: 'demo_user_1',
+                email: 'demo@college.edu',
+                registrationNo: 'CS2023001',
+                displayName: 'Demo User',
+                fullName: 'Demo User',
+                profileCompleted: true
+            };
+            localStorage.setItem('heartlink_current_user', JSON.stringify(currentUser));
+        }
+
+        // Display user info
+        const displayName = currentUser.displayName || currentUser.fullName || 'User';
+        document.getElementById('userName').textContent = displayName;
+        document.getElementById('welcomeName').textContent = displayName;
+        
+        // Set user avatar (first letter)
+        const firstLetter = displayName.charAt(0).toUpperCase();
+        document.getElementById('userAvatar').textContent = firstLetter;
+
+        // Theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Initialize mock stats
+        const stats = JSON.parse(localStorage.getItem('heartlink_stats') || '{"groups": 12, "available": 8, "admirers": 0, "matches": 0}');
+        
+        if (stats.admirers > 0) {
+            document.getElementById('admirersCount').textContent = stats.admirers;
+        }
+        document.getElementById('matchesCount').textContent = stats.matches || 0;
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('heartlink_current_user');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

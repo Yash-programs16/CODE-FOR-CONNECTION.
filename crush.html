@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crush - Heartlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ruby: #E0115F;
+            --deep-red: #C41E3A;
+            --burgundy: #800020;
+            
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(199, 21, 133, 0.2) 0%, transparent 50%),
+                          linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 30%, #FFF0F3 60%, #FFE5E9 100%);
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D1B1F;
+            --text-secondary: #8B4D5C;
+            --border-color: rgba(199, 21, 133, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: rgba(199, 21, 133, 0.2);
+        }
+
+        body.dark-mode {
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                          linear-gradient(135deg, #1a0a0e 0%, #2d1215 30%, #1f0b11 60%, #251018 100%);
+            --bg-card: rgba(40, 20, 25, 0.85);
+            --text-primary: #FFE5EC;
+            --text-secondary: #D4A5B0;
+            --border-color: rgba(255, 105, 180, 0.3);
+            --input-bg: rgba(40, 25, 30, 0.9);
+            --input-border: rgba(255, 105, 180, 0.3);
+            --ruby: #FF4081;
+            --deep-red: #FF1744;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            border-color: var(--ruby);
+            color: var(--ruby);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 32px;
+            border: 2px solid var(--border-color);
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--ruby);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .admirers-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 2px dashed var(--ruby);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .admirers-count {
+            font-size: 72px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .admirers-text {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .matches-section {
+            margin-top: 48px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .match-card {
+            background: linear-gradient(135deg, rgba(224, 17, 95, 0.08), rgba(199, 21, 133, 0.12));
+            border: 1px solid rgba(224, 17, 95, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .match-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .match-info {
+            flex: 1;
+        }
+
+        .match-info h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .match-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .chat-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .success-modal, .match-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 48px;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .modal-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-btn {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='dashboard.html'">Heartlink</div>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>💘 Crush</h1>
+            <p class="subtitle">100% anonymous until mutual match. No awkwardness, just honest connections.</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Add Crush Section -->
+            <div class="card">
+                <h2>💖 Add Your Crush</h2>
+                <p>Enter their registration number. They'll only know if you both match!</p>
+                
+                <form id="crushForm">
+                    <div class="input-group">
+                        <label for="crushRegNo">Registration Number</label>
+                        <input 
+                            type="text" 
+                            id="crushRegNo" 
+                            placeholder="e.g., CS2023001"
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="btn-primary">Submit Anonymously 💘</button>
+                </form>
+            </div>
+
+            <!-- Secret Admirers Section -->
+            <div class="admirers-card">
+                <div class="admirers-count" id="admirersCount">?</div>
+                <div class="admirers-text">
+                    <strong>Secret Admirers</strong><br>
+                    Someone has a crush on you! Add your crush to find out if it's mutual 💕
+                </div>
+            </div>
+        </div>
+
+        <!-- Matches Section -->
+        <div class="matches-section">
+            <h2 class="section-title">🎉 Your Matches</h2>
+            <div class="matches-grid" id="matchesGrid">
+                <!-- Matches will be populated here -->
+            </div>
+            <div class="empty-state" id="emptyState">
+                <div class="empty-state-icon">💔</div>
+                <p>No matches yet. Add your crush to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <h2>Crush Submitted!</h2>
+            <p>Your crush has been anonymously recorded. You'll be notified if it's a match! 🤞</p>
+            <button class="modal-btn" onclick="closeModal('successModal')">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Match Modal -->
+    <div class="match-modal" id="matchModal">
+        <div class="modal-content">
+            <div class="modal-icon">🎊</div>
+            <h2>It's a Match!</h2>
+            <p id="matchMessage">You and someone both have a crush on each other!</p>
+            <button class="modal-btn" onclick="closeModal('matchModal')">Amazing!</button>
+        </div>
+    </div>
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        if (!currentUser || !currentUser.profileCompleted) {
+            window.location.href = 'login.html';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Load crush data
+        let crushData = JSON.parse(localStorage.getItem('heartlink_crushes') || '[]');
+        let matches = JSON.parse(localStorage.getItem('heartlink_matches') || '[]');
+        const allUsers = JSON.parse(localStorage.getItem('heartlink_users') || '[]');
+
+        // Add demo users if not exist
+        if (allUsers.length < 5) {
+            const demoUsers = [
+                {
+                    id: 'demo_sarah',
+                    email: 'sarah@college.edu',
+                    registrationNo: 'CS2023002',
+                    fullName: 'Sarah Kumar',
+                    displayName: 'Sarah',
+                    department: 'Computer Science',
+                    profileCompleted: true
+                },
+                {
+                    id: 'demo_rahul',
+                    email: 'rahul@college.edu',
+                    registrationNo: 'ECE2023015',
+                    fullName: 'Rahul Patel',
+                    displayName: 'Rahul',
+                    department: 'Electronics',
+                    profileCompleted: true
+                },
+                {
+                    id: 'demo_priya',
+                    email: 'priya@college.edu',
+                    registrationNo: 'MBA2023042',
+                    fullName: 'Priya Singh',
+                    displayName: 'Priya',
+                    department: 'Business',
+                    profileCompleted: true
+                },
+                {
+                    id: 'demo_arjun',
+                    email: 'arjun@college.edu',
+                    registrationNo: 'ME2023007',
+                    fullName: 'Arjun Reddy',
+                    displayName: 'Arjun',
+                    department: 'Mechanical',
+                    profileCompleted: true
+                }
+            ];
+
+            demoUsers.forEach(user => {
+                if (!allUsers.find(u => u.id === user.id)) {
+                    allUsers.push(user);
+                }
+            });
+            localStorage.setItem('heartlink_users', JSON.stringify(allUsers));
+
+            // Add one demo crush on current user (create secret admirer!)
+            if (!crushData.find(c => c.crushRegNo === currentUser.registrationNo)) {
+                crushData.push({
+                    id: 'crush_demo_1',
+                    submitterId: 'demo_sarah',
+                    submitterRegNo: 'CS2023002',
+                    crushRegNo: currentUser.registrationNo,
+                    crushUserId: currentUser.id,
+                    submittedAt: new Date().toISOString(),
+                    isMatched: false
+                });
+                localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
+            }
+        }
+
+        // Display admirers count
+        const myAdmirers = crushData.filter(c => c.crushRegNo === currentUser.registrationNo && !c.isMatched);
+        document.getElementById('admirersCount').textContent = myAdmirers.length || '?';
+
+        // Display matches
+        displayMatches();
+
+        // Add hint for demo
+        const hintBox = document.createElement('div');
+        hintBox.style.cssText = 'background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;';
+        hintBox.innerHTML = `
+            <strong style="color: var(--text-primary);">💡 Demo Hint:</strong><br>
+            <span style="color: var(--text-secondary); font-size: 14px;">
+                Try these registration numbers: <strong>CS2023002</strong>, <strong>ECE2023015</strong>, <strong>MBA2023042</strong>, <strong>ME2023007</strong>
+            </span>
+        `;
+        document.querySelector('.content-grid').before(hintBox);
+
+        // Handle crush submission
+        document.getElementById('crushForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const crushRegNo = document.getElementById('crushRegNo').value.trim();
+
+            // Validate
+            if (!crushRegNo) {
+                alert('Please enter a registration number');
+                return;
+            }
+
+            if (crushRegNo === currentUser.registrationNo) {
+                alert('You cannot add yourself! 😅');
+                return;
+            }
+
+            // Check if crush user exists
+            const crushUser = allUsers.find(u => u.registrationNo === crushRegNo);
+            if (!crushUser) {
+                alert('No user found with this registration number');
+                return;
+            }
+
+            // Check if already submitted
+            const alreadySubmitted = crushData.find(c => 
+                c.submitterId === currentUser.id && c.crushRegNo === crushRegNo
+            );
+
+            if (alreadySubmitted) {
+                alert('You have already added this person!');
+                return;
+            }
+
+            // Add crush
+            const newCrush = {
+                id: 'crush_' + Date.now(),
+                submitterId: currentUser.id,
+                submitterRegNo: currentUser.registrationNo,
+                crushRegNo: crushRegNo,
+                crushUserId: crushUser.id,
+                submittedAt: new Date().toISOString(),
+                isMatched: false
+            };
+
+            crushData.push(newCrush);
+
+            // Check for mutual match
+            const mutualCrush = crushData.find(c => 
+                c.submitterId === crushUser.id && 
+                c.crushRegNo === currentUser.registrationNo &&
+                !c.isMatched
+            );
+
+            if (mutualCrush) {
+                // IT'S A MATCH!
+                handleMatch(newCrush, mutualCrush, crushUser);
+            } else {
+                // Just submitted
+                localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
+                document.getElementById('crushRegNo').value = '';
+                showModal('successModal');
+                
+                // Update their admirers count (they don't know who though!)
+                updateAdmirersCount();
+            }
+        });
+
+        function handleMatch(crush1, crush2, matchedUser) {
+            // Mark both as matched
+            crush1.isMatched = true;
+            crush2.isMatched = true;
+
+            // Create match record
+            const match = {
+                id: 'match_' + Date.now(),
+                user1Id: currentUser.id,
+                user2Id: matchedUser.id,
+                matchedAt: new Date().toISOString()
+            };
+
+            matches.push(match);
+
+            // Save data
+            localStorage.setItem('heartlink_crushes', JSON.stringify(crushData));
+            localStorage.setItem('heartlink_matches', JSON.stringify(matches));
+
+            // Update stats
+            updateStats();
+
+            // Show match modal
+            document.getElementById('matchMessage').textContent = 
+                `You and ${matchedUser.displayName || matchedUser.fullName} both have a crush on each other! 🎉`;
+            showModal('matchModal');
+
+            // Refresh display
+            document.getElementById('crushRegNo').value = '';
+            displayMatches();
+            updateAdmirersCount();
+        }
+
+        function displayMatches() {
+            const myMatches = matches.filter(m => 
+                m.user1Id === currentUser.id || m.user2Id === currentUser.id
+            );
+
+            const matchesGrid = document.getElementById('matchesGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (myMatches.length === 0) {
+                matchesGrid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            matchesGrid.innerHTML = myMatches.map(match => {
+                const matchedUserId = match.user1Id === currentUser.id ? match.user2Id : match.user1Id;
+                const matchedUser = allUsers.find(u => u.id === matchedUserId);
+                
+                if (!matchedUser) return '';
+
+                const initial = (matchedUser.displayName || matchedUser.fullName || 'U').charAt(0).toUpperCase();
+                const name = matchedUser.displayName || matchedUser.fullName || 'Unknown';
+                const matchDate = new Date(match.matchedAt).toLocaleDateString();
+
+                return `
+                    <div class="match-card">
+                        <div class="match-avatar">${initial}</div>
+                        <div class="match-info">
+                            <h3>${name}</h3>
+                            <p>Matched on ${matchDate}</p>
+                            <button class="chat-btn" onclick="alert('Chat feature coming soon!')">Chat Now</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateAdmirersCount() {
+            const myAdmirers = crushData.filter(c => c.crushRegNo === currentUser.registrationNo && !c.isMatched);
+            document.getElementById('admirersCount').textContent = myAdmirers.length || '?';
+        }
+
+        function updateStats() {
+            const stats = JSON.parse(localStorage.getItem('heartlink_stats') || '{}');
+            stats.matches = matches.filter(m => m.user1Id === currentUser.id || m.user2Id === currentUser.id).length;
+            stats.admirers = crushData.filter(c => c.crushRegNo === currentUser.registrationNo && !c.isMatched).length;
+            localStorage.setItem('heartlink_stats', JSON.stringify(stats));
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            if (modalId === 'matchModal') {
+                window.location.reload();
+            }
+        }
+
+        // Initialize stats
+        updateStats();
+    </script>
+</body>
+</html>

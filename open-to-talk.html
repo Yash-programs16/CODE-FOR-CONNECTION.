@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open to Talk - Heartlink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ruby: #E0115F;
+            --deep-red: #C41E3A;
+            
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(199, 21, 133, 0.2) 0%, transparent 50%),
+                          linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 30%, #FFF0F3 60%, #FFE5E9 100%);
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D1B1F;
+            --text-secondary: #8B4D5C;
+            --border-color: rgba(199, 21, 133, 0.15);
+        }
+
+        body.dark-mode {
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                          linear-gradient(135deg, #1a0a0e 0%, #2d1215 30%, #1f0b11 60%, #251018 100%);
+            --bg-card: rgba(40, 20, 25, 0.85);
+            --text-primary: #FFE5EC;
+            --text-secondary: #D4A5B0;
+            --border-color: rgba(255, 105, 180, 0.3);
+            --ruby: #FF4081;
+            --deep-red: #FF1744;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            border-color: var(--ruby);
+            color: var(--ruby);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .status-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .toggle-label {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            width: 80px;
+            height: 40px;
+            background: #DDD;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(40px);
+        }
+
+        .status-info {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(224, 17, 95, 0.08);
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .timer {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .user-card:hover {
+            border-color: var(--ruby);
+            transform: translateX(4px);
+        }
+
+        .user-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .user-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .availability {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #10b981;
+            margin-top: 8px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='dashboard.html'">Heartlink</div>
+        <a href="dashboard.html" class="back-btn">← Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>💬 Open to Talk</h1>
+            <p class="subtitle">Enable your status and connect with available students</p>
+        </div>
+
+        <!-- Status Toggle Card -->
+        <div class="status-card">
+            <h2 style="font-size: 24px; color: var(--text-primary); margin-bottom: 16px;">Your Status</h2>
+            
+            <div class="toggle-container">
+                <span class="toggle-label">I'm available to chat</span>
+                <div class="toggle-switch" id="statusToggle" onclick="toggleStatus()"></div>
+            </div>
+
+            <div class="status-info" id="statusInfo">
+                Click the toggle to make yourself available for chat!
+            </div>
+
+            <div id="timerDisplay" style="display: none;">
+                <p style="color: var(--text-secondary); margin-top: 16px;">Status expires in</p>
+                <div class="timer" id="countdown">--:--:--</div>
+            </div>
+        </div>
+
+        <!-- Available Users -->
+        <div class="section-title">Available Now (<span id="availableCount">0</span>)</div>
+        
+        <div class="users-grid" id="usersGrid">
+            <!-- Users will be populated here -->
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">💤</div>
+            <p>No one is available to talk right now. Check back later!</p>
+        </div>
+    </div>
+
+    <script>
+        const currentUser = JSON.parse(localStorage.getItem('heartlink_current_user') || 'null');
+        if (!currentUser || !currentUser.profileCompleted) {
+            window.location.href = 'login.html';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Load open to talk statuses
+        let ottStatuses = JSON.parse(localStorage.getItem('heartlink_ott_status') || '[]');
+        const allUsers = JSON.parse(localStorage.getItem('heartlink_users') || '[]');
+
+        // Initialize with some demo users if empty
+        if (ottStatuses.length === 0) {
+            ottStatuses = [
+                {
+                    userId: 'demo1',
+                    userName: 'Sarah',
+                    userDept: 'CS',
+                    enabledAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    userId: 'demo2',
+                    userName: 'Rahul',
+                    userDept: 'ECE',
+                    enabledAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 36 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    userId: 'demo3',
+                    userName: 'Priya',
+                    userDept: 'Business',
+                    enabledAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+        }
+
+        // Check my status
+        let myStatus = ottStatuses.find(s => s.userId === currentUser.id);
+
+        // Initialize UI
+        function initializeUI() {
+            const toggle = document.getElementById('statusToggle');
+            const statusInfo = document.getElementById('statusInfo');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            if (myStatus && new Date(myStatus.expiresAt) > new Date()) {
+                toggle.classList.add('active');
+                statusInfo.textContent = '✅ You are currently available to talk!';
+                timerDisplay.style.display = 'block';
+                startCountdown();
+            }
+
+            displayAvailableUsers();
+        }
+
+        function toggleStatus() {
+            const toggle = document.getElementById('statusToggle');
+            const statusInfo = document.getElementById('statusInfo');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            if (toggle.classList.contains('active')) {
+                // Disable
+                toggle.classList.remove('active');
+                statusInfo.textContent = 'You are now offline. Enable to start chatting!';
+                timerDisplay.style.display = 'none';
+                
+                // Remove from statuses
+                ottStatuses = ottStatuses.filter(s => s.userId !== currentUser.id);
+                myStatus = null;
+                
+            } else {
+                // Enable
+                toggle.classList.add('active');
+                statusInfo.textContent = '✅ You are now available to talk!';
+                timerDisplay.style.display = 'block';
+
+                // Add to statuses
+                myStatus = {
+                    userId: currentUser.id,
+                    userName: currentUser.displayName || currentUser.fullName,
+                    userDept: currentUser.department || 'Student',
+                    enabledAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
+                };
+                ottStatuses.push(myStatus);
+                
+                startCountdown();
+            }
+
+            localStorage.setItem('heartlink_ott_status', JSON.stringify(ottStatuses));
+            displayAvailableUsers();
+        }
+
+        function startCountdown() {
+            if (!myStatus) return;
+
+            function updateTimer() {
+                const now = new Date();
+                const expires = new Date(myStatus.expiresAt);
+                const diff = expires - now;
+
+                if (diff <= 0) {
+                    document.getElementById('countdown').textContent = 'Expired';
+                    document.getElementById('statusToggle').classList.remove('active');
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function displayAvailableUsers() {
+            const grid = document.getElementById('usersGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Filter out expired and current user
+            const available = ottStatuses.filter(s => 
+                new Date(s.expiresAt) > new Date() && 
+                s.userId !== currentUser.id
+            );
+
+            document.getElementById('availableCount').textContent = available.length;
+
+            if (available.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = available.map(user => {
+                const initial = user.userName.charAt(0).toUpperCase();
+                const timeLeft = Math.floor((new Date(user.expiresAt) - new Date()) / (1000 * 60 * 60));
+
+                return `
+                    <div class="user-card" onclick="startChat('${user.userId}', '${user.userName}')">
+                        <div class="user-avatar">${initial}</div>
+                        <div class="user-info">
+                            <h3>Anonymous User</h3>
+                            <p>${user.userDept}</p>
+                            <div class="availability">
+                                <span class="online-dot"></span>
+                                Available for ${timeLeft}h
+                            </div>
+                        </div>
+                        <button class="chat-btn">Chat</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startChat(userId, userName) {
+            // Open chat modal
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: flex; align-items: center; justify-content: center;';
+            
+            modal.innerHTML = `
+                <div style="background: var(--bg-card); backdrop-filter: blur(20px); border-radius: 24px; width: 90%; max-width: 500px; max-height: 80vh; border: 2px solid var(--border-color); display: flex; flex-direction: column;">
+                    <div style="padding: 20px; border-bottom: 2px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="color: var(--text-primary); margin-bottom: 4px;">Chat with Anonymous User</h3>
+                            <p style="color: var(--text-secondary); font-size: 13px;">🟢 Online</p>
+                        </div>
+                        <button onclick="this.closest('[style*=fixed]').remove()" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: var(--text-primary);">×</button>
+                    </div>
+                    
+                    <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                        <div style="background: linear-gradient(135deg, var(--ruby), var(--deep-red)); color: white; padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 70%; align-self: flex-start;">
+                            Hey! Thanks for connecting 👋
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 16px; border-top: 2px solid var(--border-color); display: flex; gap: 12px;">
+                        <input id="chatInput" type="text" placeholder="Type a message..." style="flex: 1; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--input-bg); color: var(--text-primary); font-family: Inter, sans-serif;" onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button onclick="sendMessage()" style="padding: 12px 24px; background: linear-gradient(135deg, var(--ruby), var(--deep-red)); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Send</button>
+                    </div>
+                    
+                    <div style="padding: 12px 20px; background: rgba(255, 107, 157, 0.08); text-align: center; font-size: 12px; color: var(--text-secondary); border-radius: 0 0 24px 24px;">
+                        🔒 This chat is private and screenshot protected
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Smart AI conversation system
+            const conversationContext = {
+                userMessages: [],
+                topics: [],
+                userName: 'friend'
+            };
+
+            const smartResponses = {
+                greetings: [
+                    "Hey! How's it going? 😊",
+                    "Hi there! What's up?",
+                    "Hello! Nice to meet you!",
+                    "Hey! How are you doing today?"
+                ],
+                questions: {
+                    hobbies: [
+                        "I love music and gaming! What about you?",
+                        "I'm into photography and sports. Do you have any hobbies?",
+                        "I enjoy coding and reading. What do you like to do?"
+                    ],
+                    college: [
+                        "I'm in my 2nd year. Which year are you in?",
+                        "Yeah, college life is interesting! What's your major?",
+                        "The campus is pretty nice, right? What do you think?"
+                    ],
+                    exams: [
+                        "Exams are coming up! Are you prepared?",
+                        "I'm a bit stressed about exams too. How's your prep going?",
+                        "Let's study together sometime!"
+                    ],
+                    food: [
+                        "The canteen food is okay I guess 😅 What's your favorite?",
+                        "I love pizza! What about you?",
+                        "Have you tried the new cafe near campus?"
+                    ],
+                    weekend: [
+                        "This weekend? Probably just chilling. You have any plans?",
+                        "Maybe catch a movie or hang out with friends. You?",
+                        "I'm thinking of going to that new place everyone's talking about!"
+                    ]
+                },
+                reactions: {
+                    positive: [
+                        "That's awesome! 😄",
+                        "That sounds really cool!",
+                        "I love that!",
+                        "That's so interesting!",
+                        "Nice! Tell me more!"
+                    ],
+                    agreement: [
+                        "I totally get what you mean!",
+                        "Same here!",
+                        "Exactly! I feel the same way",
+                        "Right?! I think so too"
+                    ],
+                    funny: [
+                        "Haha that's hilarious! 😂",
+                        "LOL! You're funny!",
+                        "That cracked me up! 🤣",
+                        "Good one! 😄"
+                    ]
+                },
+                fallbacks: [
+                    "That's interesting! What made you think of that?",
+                    "Tell me more about that!",
+                    "I see! How do you feel about it?",
+                    "That's cool! What else do you like?",
+                    "Interesting perspective! 🤔",
+                    "I'd love to know more about that!",
+                    "That sounds nice! What's your favorite part?",
+                    "We should talk more about this!"
+                ]
+            };
+
+            function analyzeMessage(message) {
+                const lower = message.toLowerCase();
+                
+                // Detect greetings
+                if (/^(hi|hey|hello|sup|yo|hii|heyy)\b/.test(lower)) {
+                    return { type: 'greeting' };
+                }
+                
+                // Detect questions
+                if (lower.includes('?')) {
+                    if (/hobby|hobbies|interest|like to do|do for fun/.test(lower)) {
+                        return { type: 'question', topic: 'hobbies' };
+                    }
+                    if (/exam|test|study|prep|midterm|final/.test(lower)) {
+                        return { type: 'question', topic: 'exams' };
+                    }
+                    if (/food|eat|hungry|lunch|dinner|canteen/.test(lower)) {
+                        return { type: 'question', topic: 'food' };
+                    }
+                    if (/weekend|saturday|sunday|plans|free time/.test(lower)) {
+                        return { type: 'question', topic: 'weekend' };
+                    }
+                    if (/year|major|course|branch|department|college/.test(lower)) {
+                        return { type: 'question', topic: 'college' };
+                    }
+                }
+                
+                // Detect reactions needed
+                if (/love|awesome|great|amazing|best|favorite/.test(lower)) {
+                    return { type: 'reaction', mood: 'positive' };
+                }
+                if (/agree|same|exactly|right|true|yeah|yes/.test(lower)) {
+                    return { type: 'reaction', mood: 'agreement' };
+                }
+                if (/haha|lol|lmao|funny|joke/.test(lower)) {
+                    return { type: 'reaction', mood: 'funny' };
+                }
+                
+                // Detect topics for follow-up
+                if (/music|song|band|concert|playlist/.test(lower)) {
+                    conversationContext.topics.push('music');
+                    return { type: 'topic', subject: 'music' };
+                }
+                if (/game|gaming|play|ps5|xbox|pc/.test(lower)) {
+                    conversationContext.topics.push('gaming');
+                    return { type: 'topic', subject: 'gaming' };
+                }
+                if (/code|coding|programming|developer|project/.test(lower)) {
+                    conversationContext.topics.push('coding');
+                    return { type: 'topic', subject: 'coding' };
+                }
+                if (/sport|football|cricket|basketball|gym/.test(lower)) {
+                    conversationContext.topics.push('sports');
+                    return { type: 'topic', subject: 'sports' };
+                }
+                
+                return { type: 'fallback' };
+            }
+
+            function generateSmartResponse(userMessage) {
+                const analysis = analyzeMessage(userMessage);
+                conversationContext.userMessages.push(userMessage);
+                
+                let response;
+                
+                switch (analysis.type) {
+                    case 'greeting':
+                        response = smartResponses.greetings[Math.floor(Math.random() * smartResponses.greetings.length)];
+                        break;
+                        
+                    case 'question':
+                        response = smartResponses.questions[analysis.topic][Math.floor(Math.random() * smartResponses.questions[analysis.topic].length)];
+                        break;
+                        
+                    case 'reaction':
+                        response = smartResponses.reactions[analysis.mood][Math.floor(Math.random() * smartResponses.reactions[analysis.mood].length)];
+                        break;
+                        
+                    case 'topic':
+                        const topicResponses = {
+                            'music': [
+                                "Oh nice! What genre do you listen to?",
+                                "Music is life! 🎵 Who's your favorite artist?",
+                                "Same! What's on your playlist right now?"
+                            ],
+                            'gaming': [
+                                "Gaming is awesome! What games do you play?",
+                                "Nice! PC or console? 🎮",
+                                "I love gaming too! We should play together sometime"
+                            ],
+                            'coding': [
+                                "That's cool! What languages do you know?",
+                                "Coding is fun! Working on any projects? 💻",
+                                "Same here! What are you building?"
+                            ],
+                            'sports': [
+                                "Sports are great! Which one do you play?",
+                                "Nice! I love staying active too! ⚽",
+                                "We should play together sometime!"
+                            ]
+                        };
+                        response = topicResponses[analysis.subject][Math.floor(Math.random() * topicResponses[analysis.subject].length)];
+                        break;
+                        
+                    default:
+                        response = smartResponses.fallbacks[Math.floor(Math.random() * smartResponses.fallbacks.length)];
+                }
+                
+                // Add contextual follow-ups after a few messages
+                if (conversationContext.userMessages.length > 3 && Math.random() > 0.7) {
+                    const followUps = [
+                        "\nBtw, what year are you in?",
+                        "\nDo you live on campus or commute?",
+                        "\nWhat's your favorite spot on campus?",
+                        "\nAre you in any clubs or societies?"
+                    ];
+                    response += followUps[Math.floor(Math.random() * followUps.length)];
+                }
+                
+                return response;
+            }
+
+            window.sendMessage = function() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                if (!message) return;
+                
+                const messagesDiv = document.getElementById('chatMessages');
+                
+                // User message
+                const userMsg = document.createElement('div');
+                userMsg.style.cssText = 'background: rgba(224, 17, 95, 0.1); color: var(--text-primary); padding: 12px 16px; border-radius: 16px 16px 4px 16px; max-width: 70%; align-self: flex-end;';
+                userMsg.textContent = message;
+                messagesDiv.appendChild(userMsg);
+                
+                input.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                
+                // Show typing indicator
+                const typingDiv = document.createElement('div');
+                typingDiv.id = 'typing';
+                typingDiv.style.cssText = 'background: linear-gradient(135deg, var(--ruby), var(--deep-red)); color: white; padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 70%; align-self: flex-start;';
+                typingDiv.textContent = 'typing...';
+                messagesDiv.appendChild(typingDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                
+                // Generate smart AI response
+                setTimeout(() => {
+                    typingDiv.remove();
+                    
+                    const aiMsg = document.createElement('div');
+                    aiMsg.style.cssText = 'background: linear-gradient(135deg, var(--ruby), var(--deep-red)); color: white; padding: 12px 16px; border-radius: 16px 16px 16px 4px; max-width: 70%; align-self: flex-start;';
+                    aiMsg.textContent = generateSmartResponse(message);
+                    messagesDiv.appendChild(aiMsg);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }, 800 + Math.random() * 800);
+            };
+        }
+
+        // Initialize
+        initializeUI();
+    </script>
+</body>
+</html>

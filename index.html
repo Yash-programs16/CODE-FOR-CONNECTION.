@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heartlink - Connect. Crush. Campus.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Valentine's Luxury Palette */
+            --rose-gold: #B76E79;
+            --deep-red: #C41E3A;
+            --burgundy: #800020;
+            --champagne: #F7E7CE;
+            --blush: #FFC0CB;
+            --wine: #722F37;
+            --cream: #FFFAF0;
+            --ruby: #E0115F;
+            
+            /* Light mode - Romantic & Luxurious */
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.3) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(199, 21, 133, 0.2) 0%, transparent 50%),
+                          linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 30%, #FFF0F3 60%, #FFE5E9 100%);
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #2D1B1F;
+            --text-secondary: #8B4D5C;
+            --border-color: rgba(199, 21, 133, 0.15);
+            --nav-bg: rgba(255, 250, 252, 0.8);
+            --glass-effect: rgba(255, 255, 255, 0.25);
+            --shadow-color: rgba(199, 21, 133, 0.1);
+        }
+
+        body.dark-mode {
+            /* Dark mode - Sultry & Sophisticated */
+            --bg-primary: radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                          linear-gradient(135deg, #1a0a0e 0%, #2d1215 30%, #1f0b11 60%, #251018 100%);
+            --bg-card: rgba(40, 20, 25, 0.85);
+            --text-primary: #FFE5EC;
+            --text-secondary: #D4A5B0;
+            --border-color: rgba(255, 105, 180, 0.3);
+            --nav-bg: rgba(25, 15, 18, 0.9);
+            --glass-effect: rgba(60, 30, 40, 0.4);
+            --shadow-color: rgba(255, 20, 100, 0.2);
+            --rose-gold: #E8B4B8;
+            --deep-red: #FF1744;
+            --ruby: #FF4081;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.4s ease;
+        }
+
+        /* Glassmorphism Base */
+        .glass {
+            background: var(--glass-effect);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Animated background hearts */
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(224, 17, 95, 0.2);
+            animation: float 15s infinite ease-in-out;
+            transition: color 0.4s ease;
+            filter: drop-shadow(0 2px 8px rgba(255, 20, 100, 0.3));
+        }
+
+        body.dark-mode .heart {
+            color: rgba(255, 64, 129, 0.35);
+            filter: drop-shadow(0 2px 12px rgba(255, 64, 129, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { 
+                transform: translateY(-100vh) rotate(360deg); 
+                opacity: 0;
+            }
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 25%; animation-delay: 3s; font-size: 15px; }
+        .heart:nth-child(3) { left: 45%; animation-delay: 6s; font-size: 25px; }
+        .heart:nth-child(4) { left: 65%; animation-delay: 2s; font-size: 18px; }
+        .heart:nth-child(5) { left: 85%; animation-delay: 8s; font-size: 22px; }
+        .heart:nth-child(6) { left: 15%; animation-delay: 5s; font-size: 16px; }
+        .heart:nth-child(7) { left: 75%; animation-delay: 10s; }
+        .heart:nth-child(8) { left: 35%; animation-delay: 4s; font-size: 19px; }
+
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 80px;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.4s ease;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red), var(--burgundy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            border-color: var(--ruby);
+            box-shadow: 0 8px 25px rgba(255, 20, 100, 0.3);
+        }
+
+        .sun-icon, .moon-icon {
+            position: absolute;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sun-icon {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
+        }
+
+        .moon-icon {
+            opacity: 0;
+            transform: translateY(20px) rotate(180deg);
+        }
+
+        body.dark-mode .sun-icon {
+            opacity: 0;
+            transform: translateY(-20px) rotate(-180deg);
+        }
+
+        body.dark-mode .moon-icon {
+            opacity: 1;
+            transform: translateY(0) rotate(0deg);
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--deep-red);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(135deg, var(--deep-red), var(--ruby));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 20, 100, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 20, 100, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(255, 20, 100, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            padding: 80px 80px 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content {
+            text-align: left;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--ruby) 0%, var(--deep-red) 50%, var(--burgundy) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out;
+            filter: drop-shadow(0 2px 8px rgba(255, 20, 100, 0.2));
+        }
+
+        .hero-content .subtitle {
+            font-size: 22px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.5;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-content .cta {
+            display: flex;
+            gap: 20px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Cupid Illustration */
+        .hero-illustration {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 500px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .cupid-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cupid-container:hover {
+            transform: scale(1.05);
+        }
+
+        .cupid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 180px;
+            z-index: 2;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 10px 30px rgba(255, 20, 100, 0.3));
+        }
+
+        .cupid-container:hover .cupid {
+            transform: translate(-50%, -50%) rotate(-15deg);
+        }
+
+        /* Floating hearts around Cupid */
+        .floating-heart {
+            position: absolute;
+            font-size: 40px;
+            animation: floatAround 4s infinite ease-in-out;
+            opacity: 0.6;
+            filter: drop-shadow(0 4px 8px rgba(255, 20, 100, 0.3));
+        }
+
+        .floating-heart:nth-child(1) {
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .floating-heart:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .floating-heart:nth-child(3) {
+            bottom: 25%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-heart:nth-child(4) {
+            bottom: 15%;
+            right: 15%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes floatAround {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* Arrow shooting animation */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 60px;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 3;
+            filter: drop-shadow(0 4px 12px rgba(255, 20, 100, 0.5));
+        }
+
+        .cupid-container:hover .arrow {
+            opacity: 1;
+            animation: shootArrow 1s ease-out infinite;
+        }
+
+        @keyframes shootArrow {
+            0% {
+                transform: translate(-50%, -50%) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(200%, -200%) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Heart explosion on hover */
+        .heart-burst {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 30px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cupid-container:hover .heart-burst {
+            animation: burstHeart 0.8s ease-out infinite;
+        }
+
+        .heart-burst:nth-child(5) { animation-delay: 0s; }
+        .heart-burst:nth-child(6) { animation-delay: 0.15s; }
+        .heart-burst:nth-child(7) { animation-delay: 0.3s; }
+        .heart-burst:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes burstHeart {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .heart-burst:nth-child(5) { --x: -80px; --y: -80px; }
+        .heart-burst:nth-child(6) { --x: 80px; --y: -80px; }
+        .heart-burst:nth-child(7) { --x: -80px; --y: 80px; }
+        .heart-burst:nth-child(8) { --x: 80px; --y: 80px; }
+
+        /* Decorative circle behind Cupid */
+        .cupid-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(224, 17, 95, 0.15), transparent);
+            border-radius: 50%;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        body.dark-mode .cupid-bg {
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.25), transparent);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            position: relative;
+            z-index: 1;
+            padding: 80px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, var(--deep-red), var(--burgundy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(224, 17, 95, 0.1), rgba(199, 21, 133, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 20, 100, 0.3);
+            border-color: var(--ruby);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 2px 8px rgba(255, 20, 100, 0.2));
+        }
+
+        .feature-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--deep-red), var(--burgundy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-tags {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            background: rgba(224, 17, 95, 0.12);
+            color: var(--deep-red);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid rgba(224, 17, 95, 0.2);
+        }
+
+        body.dark-mode .tag {
+            background: rgba(255, 64, 129, 0.2);
+            color: var(--ruby);
+            border-color: rgba(255, 64, 129, 0.3);
+        }
+
+        /* How it works */
+        .how-it-works {
+            position: relative;
+            z-index: 1;
+            padding: 80px 40px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            transition: background 0.4s ease;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .how-it-works h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, var(--deep-red), var(--burgundy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .steps {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+
+        .step-number {
+            min-width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(255, 20, 100, 0.4);
+        }
+
+        .step-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--deep-red), var(--burgundy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            position: relative;
+            z-index: 1;
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .footer-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--ruby), var(--deep-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-cta p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            background: var(--charcoal);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .college-badge {
+            display: inline-block;
+            background: rgba(224, 17, 95, 0.15);
+            border: 1px solid rgba(224, 17, 95, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--deep-red);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode .college-badge {
+            background: rgba(255, 64, 129, 0.2);
+            border-color: rgba(255, 64, 129, 0.4);
+            color: var(--ruby);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 30px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 60px 30px;
+                gap: 40px;
+            }
+
+            .hero-content {
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 42px;
+            }
+
+            .hero-content .subtitle {
+                font-size: 18px;
+            }
+
+            .hero-content .cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-illustration {
+                height: 350px;
+            }
+
+            .cupid-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .cupid {
+                font-size: 120px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Glassmorphism effect for cards */
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Hearts -->
+    <div class="bg-hearts">
+        <div class="heart">💕</div>
+        <div class="heart">💝</div>
+        <div class="heart">💖</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+        <div class="heart">💞</div>
+        <div class="heart">💕</div>
+        <div class="heart">💝</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Heartlink</div>
+        <div class="nav-buttons">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+            <a href="login.html" class="btn btn-outline">Login</a>
+            <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Find Your Connection<br>On Campus</h1>
+            <p class="subtitle">Friendships. Conversations. Crushes. All in one classy space for your college community.</p>
+            <div class="cta">
+                <a href="signup.html" class="btn btn-primary" style="padding: 16px 48px; font-size: 18px; text-decoration: none;">Get Started</a>
+                <a href="#features" class="btn btn-outline" style="padding: 16px 48px; font-size: 18px; text-decoration: none;">Learn More</a>
+            </div>
+            <div class="college-badge">🎓 Verified College Students Only</div>
+        </div>
+
+        <div class="hero-illustration">
+            <div class="cupid-container">
+                <div class="cupid-bg"></div>
+                <div class="floating-heart">💕</div>
+                <div class="floating-heart">💖</div>
+                <div class="floating-heart">💗</div>
+                <div class="floating-heart">💝</div>
+                <div class="heart-burst">💘</div>
+                <div class="heart-burst">💘</div>
+                <div class="heart-burst">💘</div>
+                <div class="heart-burst">💘</div>
+                <div class="cupid">💘</div>
+                <div class="arrow">➤</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2>Three Ways to Connect</h2>
+        <div class="feature-grid">
+            <!-- Feature 1: Friendship -->
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Friendship</h3>
+                <p>Join or create groups based on your passions—coding, football, music, study sessions, and more. Build your campus tribe with public profiles and shared interests.</p>
+                <div class="feature-tags">
+                    <span class="tag">Public Profile</span>
+                    <span class="tag">Group Chats</span>
+                    <span class="tag">Hobby-Based</span>
+                </div>
+            </div>
+
+            <!-- Feature 2: Open to Talk -->
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Open to Talk</h3>
+                <p>Enable your availability for 24-48 hours. Chat with others who are open to talk or browse who's available. Private conversations with screenshot protection—either person can end anytime.</p>
+                <div class="feature-tags">
+                    <span class="tag">Time-Limited</span>
+                    <span class="tag">Screenshot Protected</span>
+                    <span class="tag">Private Chat</span>
+                </div>
+            </div>
+
+            <!-- Feature 3: Crush -->
+            <div class="feature-card">
+                <div class="feature-icon">💘</div>
+                <h3>Crush</h3>
+                <p>Completely anonymous. Enter your crush's registration number. They'll only know if it's mutual. No awkwardness, no rejection—just a notification if you both match.</p>
+                <div class="feature-tags">
+                    <span class="tag">100% Anonymous</span>
+                    <span class="tag">Mutual Match Only</span>
+                    <span class="tag">Zero Awkwardness</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Verify with College Email</h3>
+                    <p>Sign up using your official college email ID. Only verified students can join—keeping it safe and authentic.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Build Your Profile</h3>
+                    <p>Add your interests, hobbies, and what you're looking for. Choose between Friendship, Open to Talk, or Crush features.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Start Connecting</h3>
+                    <p>Join groups, enable Open to Talk status, or secretly add your crush. It's all up to you.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Make Meaningful Connections</h3>
+                    <p>Chat safely, find your people, and who knows—maybe even match with your crush. Your campus social life, reimagined.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="footer-cta">
+        <h2>Ready to Connect?</h2>
+        <p>Join your college community today and start making meaningful connections.</p>
+        <a href="signup.html" class="btn btn-primary" style="padding: 18px 60px; font-size: 20px; text-decoration: none;">Sign Up Now</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Heartlink. Made with 💖 for your campus.</p>
+        <p style="margin-top: 10px; font-size: 14px;">Secure. Private. College-Verified.</p>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Save preference
+            const currentTheme = body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', currentTheme);
+            
+            // Add a little rotation animation
+            themeToggle.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 300);
+        });
+
+        // Smooth scroll for learn more button
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add intersection observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Cupid interaction
+        const cupidContainer = document.querySelector('.cupid-container');
+        if (cupidContainer) {
+            let isHovering = false;
+
+            cupidContainer.addEventListener('mouseenter', () => {
+                isHovering = true;
+                createExtraHearts();
+            });
+
+            cupidContainer.addEventListener('mouseleave', () => {
+                isHovering = false;
+            });
+
+            cupidContainer.addEventListener('click', () => {
+                // Create burst of hearts on click
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(() => {
+                        createFlyingHeart();
+                    }, i * 80);
+                }
+            });
+
+            function createFlyingHeart() {
+                const heart = document.createElement('div');
+                heart.textContent = ['💕', '💖', '💗', '💝', '💘', '❤️'][Math.floor(Math.random() * 6)];
+                heart.style.position = 'fixed';
+                heart.style.fontSize = (Math.random() * 20 + 30) + 'px';
+                heart.style.zIndex = '1000';
+                heart.style.pointerEvents = 'none';
+                
+                const rect = cupidContainer.getBoundingClientRect();
+                heart.style.left = rect.left + rect.width / 2 + 'px';
+                heart.style.top = rect.top + rect.height / 2 + 'px';
+                
+                document.body.appendChild(heart);
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 300 + 200;
+                const endX = Math.cos(angle) * distance;
+                const endY = Math.sin(angle) * distance;
+                
+                heart.animate([
+                    { 
+                        transform: 'translate(-50%, -50%) scale(0) rotate(0deg)',
+                        opacity: 1
+                    },
+                    { 
+                        transform: `translate(calc(-50% + ${endX}px), calc(-50% + ${endY}px)) scale(1.5) rotate(${Math.random() * 360}deg)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 1500,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                });
+                
+                setTimeout(() => heart.remove(), 1500);
+            }
+
+            function createExtraHearts() {
+                if (!isHovering) return;
+                
+                const heart = document.createElement('div');
+                heart.textContent = '💕';
+                heart.style.position = 'absolute';
+                heart.style.fontSize = '25px';
+                heart.style.left = (Math.random() * 100) + '%';
+                heart.style.top = (Math.random() * 100) + '%';
+                heart.style.opacity = '0';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '10';
+                
+                cupidContainer.appendChild(heart);
+                
+                heart.animate([
+                    { opacity: 0, transform: 'scale(0) translateY(0)' },
+                    { opacity: 0.8, transform: 'scale(1) translateY(-20px)' },
+                    { opacity: 0, transform: 'scale(1.2) translateY(-50px)' }
+                ], {
+                    duration: 2000,
+                    easing: 'ease-out'
+                });
+                
+                setTimeout(() => heart.remove(), 2000);
+                
+                if (isHovering) {
+                    setTimeout(createExtraHearts, 300);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
